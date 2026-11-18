@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #1f1f1f; }
+  body {
+    width: 1100px; height: 720px;
+    font-family: 'Segoe UI', 'Segoe WPC', system-ui, sans-serif;
+    font-size: 13px;
+    color: #cccccc;
+    display: flex;
+    overflow: hidden;
+  }
+  /* ---------- activity bar ---------- */
+  .activity {
+    width: 48px; background: #333333;
+    display: flex; flex-direction: column; align-items: center;
+    padding-top: 4px; flex: 0 0 48px;
+  }
+  .slot {
+    width: 48px; height: 48px;
+    display: grid; place-items: center;
+    position: relative; cursor: pointer;
+  }
+  .slot svg { width: 24px; height: 24px; fill: none; stroke: #868686; stroke-width: 1.3; opacity: .95; }
+  .slot.active svg { stroke: none; }
+  .slot.active::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 2px; background: #cccccc;
+  }
+  .slot .badge {
+    position: absolute; right: 8px; bottom: 8px;
+    min-width: 15px; height: 15px; border-radius: 8px;
+    background: #616161; color: #fff; font-size: 9px;
+    display: grid; place-items: center; padding: 0 4px;
+  }
+  .activity .spacer { flex: 1 1 auto; }
+  /* ---------- sidebar ---------- */
+  .sidebar {
+    width: 300px; flex: 0 0 300px;
+    background: #252526;
+    border-right: 1px solid #1b1b1b;
+    display: flex; flex-direction: column;
+  }
+  .side-title {
+    height: 35px; padding: 0 12px 0 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 11px; letter-spacing: .06em; color: #bbbbbb; text-transform: uppercase;
+  }
+  .side-title .actions { display: flex; gap: 10px; }
+  .side-title .actions svg { width: 14px; height: 14px; stroke: #cccccc; fill: none; stroke-width: 1.3; }
+  .section-head {
+    height: 22px; padding: 0 8px 0 8px;
+    display: flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700; color: #bbbbbb; text-transform: uppercase;
+    letter-spacing: .04em; background: transparent;
+    user-select: none;
+  }
+  .section-head .chev { width: 16px; height: 16px; display: grid; place-items: center; color: #cccccc; }
+  .section-head .chev svg { width: 10px; height: 10px; fill: #cccccc; }
+  .section-head .count {
+    margin-left: auto; font-weight: 400; color: #8a8a8a; font-size: 10px;
+  }
+  .item {
+    height: 22px; padding: 0 8px 0 14px;
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer; white-space: nowrap;
+  }
+  .item:hover { background: #2a2d2e; }
+  .item.selected { background: #04395e; outline: 1px solid #007fd4; outline-offset: -1px; }
+  .item .ico { width: 16px; height: 16px; flex: 0 0 16px; display: grid; place-items: center; }
+  .item .ico svg { width: 14px; height: 14px; fill: #c5c5c5; }
+  .item .label { overflow: hidden; text-overflow: ellipsis; }
+  .item .desc {
+    margin-left: auto; color: #8a8a8a; font-size: 11px;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .sidebar .divider { height: 1px; background: #303031; margin: 10px 0 8px; }
+  .hint {
+    padding: 8px 14px 14px; color: #8a8a8a; font-size: 11px; line-height: 1.5;
+  }
+  /* ---------- editor ---------- */
+  .editor { flex: 1 1 auto; display: flex; flex-direction: column; background: #1f1f1f; min-width: 0; }
+  .tabs { height: 35px; background: #181818; display: flex; align-items: stretch; }
+  .tab {
+    display: flex; align-items: center; gap: 6px;
+    padding: 0 12px; background: #1f1f1f; color: #ffffff;
+    border-right: 1px solid #181818; font-size: 12.5px;
+    position: relative;
+  }
+  .tab::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: #0078d4; }
+  .tab .dot { width: 8px; height: 8px; border-radius: 50%; background: #519aba; }
+  .tab .close { margin-left: 8px; color: #cccccc; font-size: 13px; opacity: .7; }
+  .tabs .fill { flex: 1 1 auto; background: #181818; }
+  .breadcrumb {
+    height: 28px; display: flex; align-items: center; gap: 6px;
+    padding: 0 16px; color: #a9a9a9; font-size: 11.5px;
+  }
+  .breadcrumb .sep { opacity: .55; }
+  .code { flex: 1 1 auto; display: flex; font-family: Consolas, 'Courier New', monospace; font-size: 13px; line-height: 21px; padding-top: 8px; overflow: hidden; }
+  .gutter { width: 62px; text-align: right; padding-right: 14px; color: #6e7681; user-select: none; }
+  .lines { padding-left: 6px; padding-right: 20px; min-width: 0; }
+  .h { color: #4ec9b0; }
+  .h2 { color: #569cd6; }
+  .str { color: #ce9178; }
+  .kw { color: #c586c0; }
+  .mut { color: #6a9955; }
+  .num { color: #b5cea8; }
+  /* ---------- status bar ---------- */
+  .status {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 22px;
+    background: #181818; border-top: 1px solid #2b2b2b;
+    display: flex; align-items: center; gap: 14px; padding: 0 12px 0 4px;
+    font-size: 11.5px; color: #ffffff;
+  }
+  .status .left { display: flex; gap: 14px; align-items: center; padding-left: 6px; }
+  .status .fill { flex: 1 1 auto; }
+  .status .right { display: flex; gap: 14px; align-items: center; }
+  .status .pe {
+    background: #04395e; display: flex; align-items: center; gap: 5px;
+    height: 22px; padding: 0 8px; color: #ffffff;
+  }
+  .status svg { width: 14px; height: 14px; fill: #ffffff; }
+</style>
+</head>
+<body>
+  <!-- activity bar -->
+  <div class="activity">
+    <div class="slot">
+      <svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" /></svg>
+    </div>
+    <div class="slot">
+      <svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6" /><path d="M15 15l4.5 4.5" /></svg>
+    </div>
+    <div class="slot">
+      <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2" /><circle cx="6" cy="18" r="2.2" /><circle cx="18" cy="12" r="2.2" /><path d="M8 7l8 4M8 17l8-4" /></svg>
+    </div>
+    <div class="slot">
+      <svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3-5 3z" /></svg>
+    </div>
+    <div class="slot active">
+      <svg viewBox="0 0 64 64">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#8b5cf6" /><stop offset="1" stop-color="#3b82f6" />
+          </linearGradient>
+        </defs>
+        <rect width="64" height="64" rx="14" fill="url(#g)" />
+        <rect x="15" y="19" width="26" height="5" rx="2.5" fill="#fff" opacity=".95" />
+        <rect x="15" y="29" width="20" height="5" rx="2.5" fill="#fff" opacity=".75" />
+        <rect x="15" y="39" width="14" height="5" rx="2.5" fill="#fff" opacity=".55" />
+        <path d="M45 30l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff" />
+      </svg>
+    </div>
+    <div class="slot">
+      <svg viewBox="0 0 24 24"><path d="M4 18V6h7v12zM13 18V6h7v12z" /></svg>
+    </div>
+    <div class="spacer"></div>
+    <div class="slot">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" /><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" /></svg>
+    </div>
+  </div>
+
+  <!-- sidebar -->
+  <div class="sidebar">
+    <div class="side-title">
+      <span>Prompt Engineer</span>
+      <span class="actions">
+        <svg viewBox="0 0 16 16"><path d="M2 3.5h12M2 8h12M2 12.5h12" /></svg>
+        <svg viewBox="0 0 16 16"><path d="M8 2v12M2 8h12" /></svg>
+      </span>
+    </div>
+
+    <div class="section-head">
+      <span class="chev"><svg viewBox="0 0 16 16"><path d="M4 6l4 4 4-4z" /></svg></span>
+      Modes
+      <span class="count">9</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><path d="M9 1L3 9h4l-1 6 7-9H8z" /></svg></span>
+      <span class="label">Quick Enhance</span><span class="desc">Fast cleanup</span>
+    </div>
+    <div class="item selected">
+      <span class="ico"><svg viewBox="0 0 16 16"><path d="M8 1.6l1.9 4.3 4.6.5-3.4 3.1.9 4.6L8 11.8 4 14.1l.9-4.6L1.5 6.4l4.6-.5z" /></svg></span>
+      <span class="label">Professional Enhance</span><span class="desc">Structured</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><path d="M6 4L2.5 8 6 12M10 4l3.5 4L10 12" fill="none" stroke="#c5c5c5" stroke-width="1.5" stroke-linecap="round" /></svg></span>
+      <span class="label">Developer Mode</span><span class="desc">Implementation</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><path d="M3 3h4v4H3zM9 3h4v4H9zM3 9h4v4H3zM9 9h4v4H9z" fill="none" stroke="#c5c5c5" stroke-width="1.3" /></svg></span>
+      <span class="label">Expert Architect</span><span class="desc">System design</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><ellipse cx="8" cy="9" rx="3.4" ry="4" /><path d="M5 6L3.5 4M11 6l1.5-2M5 9H3M11 9h2M5.6 12L4 13.5M10.4 12L12 13.5" fill="none" stroke="#c5c5c5" stroke-width="1.3" /></svg></span>
+      <span class="label">Debugging Mode</span><span class="desc">Root cause</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><path d="M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z" fill="none" stroke="#c5c5c5" stroke-width="1.3" /><circle cx="8" cy="8" r="1.9" /></svg></span>
+      <span class="label">Code Review Mode</span><span class="desc">Findings</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><path d="M3 10l6-6 3 3-6 6H3z" /><path d="M11 3l2 2" fill="none" stroke="#c5c5c5" stroke-width="1.3" /></svg></span>
+      <span class="label">UI/UX Mode</span><span class="desc">Interfaces</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><path d="M8 1.5c3 2 3.6 6 2.4 9.2L8 14l-2.4-3.3C4.4 7.5 5 3.5 8 1.5z" /><circle cx="8" cy="6" r="1.4" fill="#1f1f1f" /></svg></span>
+      <span class="label">Game Development</span><span class="desc">Gameplay</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><rect x="3" y="5" width="10" height="7" rx="1.5" /><circle cx="6.2" cy="8.5" r="1" fill="#1f1f1f" /><circle cx="9.8" cy="8.5" r="1" fill="#1f1f1f" /><path d="M8 2v3" fill="none" stroke="#c5c5c5" stroke-width="1.3" /><circle cx="8" cy="1.8" r="1" /></svg></span>
+      <span class="label">Autonomous Agent</span><span class="desc">Agent-ready</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-head">
+      <span class="chev"><svg viewBox="0 0 16 16"><path d="M4 6l4 4 4-4z" /></svg></span>
+      Setup
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><circle cx="5.5" cy="8" r="2.6" /><path d="M8 8h6M11.5 8v2M13.5 8v2.6" fill="none" stroke="#c5c5c5" stroke-width="1.4" /></svg></span>
+      <span class="label">Set API Key</span><span class="desc">SecretStorage</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><path d="M4 4h8l-.6 9H4.6z" /><path d="M6.5 4V2.5h3V4M3 4h10" fill="none" stroke="#c5c5c5" stroke-width="1.3" /></svg></span>
+      <span class="label">Clear API Key</span><span class="desc">Remove</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="1.5" fill="none" stroke="#c5c5c5" stroke-width="1.3" /><path d="M2 6h12" fill="none" stroke="#c5c5c5" stroke-width="1.3" /></svg></span>
+      <span class="label">Open Panel</span><span class="desc">Ctrl+Alt+O</span>
+    </div>
+    <div class="item">
+      <span class="ico"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.2" /><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4" fill="none" stroke="#c5c5c5" stroke-width="1.2" /></svg></span>
+      <span class="label">Extension Settings</span><span class="desc">Configure</span>
+    </div>
+
+    <div class="hint">Tip: clicking a mode opens the panel with that mode preselected and your current selection prefilled.</div>
+  </div>
+
+  <!-- editor -->
+  <div class="editor">
+    <div class="tabs">
+      <div class="tab"><span class="dot"></span> enhanced-prompt.md <span class="close">&times;</span></div>
+      <div class="fill"></div>
+    </div>
+    <div class="breadcrumb">
+      <span>src</span><span class="sep">&rsaquo;</span><span>docs</span><span class="sep">&rsaquo;</span>
+      <span style="color:#cccccc">enhanced-prompt.md</span>
+    </div>
+    <div class="code">
+      <div class="gutter">
+        1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20<br />21<br />22<br />23<br />24
+      </div>
+      <div class="lines">
+        <span class="h">## Task</span><br />
+        Fix the dashboard save button that intermittently does nothing.<br />
+        <br />
+        <span class="h">## Context to verify first</span><br />
+        <span class="kw">-</span> Locate the save handler for the project form <span class="mut">(React + TypeScript)</span>.<br />
+        <span class="kw">-</span> Confirm how it calls <span class="str">`POST /api/projects`</span>, including body and error paths.<br />
+        <span class="kw">-</span> Check whether the button is disabled while a request is in flight.<br />
+        <br />
+        <span class="h">## Requirements</span><br />
+        <span class="num">1.</span> Reproduce the failure and capture evidence.<br />
+        <span class="num">2.</span> Identify the root cause before changing code.<br />
+        <span class="num">3.</span> Apply the smallest fix that resolves the cause.<br />
+        <span class="num">4.</span> Add a regression test for the failing path.<br />
+        <span class="num">5.</span> Run the relevant checks and report the actual output.<br />
+        <br />
+        <span class="h">## Success criteria</span><br />
+        <span class="kw">-</span> Saving reliably updates the project and shows feedback.<br />
+        <span class="kw">-</span> Failed saves surface an actionable error.<br />
+        <span class="kw">-</span> No unrelated refactors or new dependencies.<br />
+        <br />
+        <span class="mut">Enhanced with Universal AI Prompt Engineer — Debugging Mode</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="status">
+    <div class="left">
+      <span>&#10010;</span><span>main*</span>
+    </div>
+    <div class="fill"></div>
+    <div class="right">
+      <span>Ln 24, Col 58</span><span>Spaces: 2</span><span>UTF-8</span><span>Markdown</span>
+      <span class="pe">
+        <svg viewBox="0 0 16 16"><path d="M8 1l1.7 4.3L14 7l-4.3 1.7L8 13l-1.7-4.3L2 7l4.3-1.7z" /></svg>
+        Prompt Engineer
+      </span>
+    </div>
+  </div>
+</body>
+</html>

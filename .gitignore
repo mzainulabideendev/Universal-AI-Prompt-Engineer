@@ -1,0 +1,8 @@
+node_modules
+.vscode-test
+out
+dist
+visualstudio/bin
+visualstudio/obj
+*.vsix
+docs/preview/.generated

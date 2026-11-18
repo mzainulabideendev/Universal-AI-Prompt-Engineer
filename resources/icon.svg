@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="14" y1="6" x2="116" y2="122" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6" />
+      <stop offset="0.52" stop-color="#6366f1" />
+      <stop offset="1" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="gloss" x1="64" y1="4" x2="64" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.30" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg)" />
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#gloss)" />
+  <rect x="4.75" y="4.75" width="118.5" height="118.5" rx="27.25" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="1.5" />
+  <rect x="28" y="34" width="54" height="9" rx="4.5" fill="#ffffff" opacity="0.96" />
+  <rect x="28" y="51" width="42" height="9" rx="4.5" fill="#ffffff" opacity="0.78" />
+  <rect x="28" y="68" width="31" height="9" rx="4.5" fill="#ffffff" opacity="0.58" />
+  <path d="M90 58.5l5.7 13.3 13.3 5.7-13.3 5.7L90 96.5l-5.7-13.3L71 77.5l13.3-5.7z" fill="#ffffff" />
+  <circle cx="103" cy="43" r="4.6" fill="#ffffff" opacity="0.85" />
+</svg>

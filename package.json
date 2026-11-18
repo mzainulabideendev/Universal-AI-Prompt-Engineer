@@ -1,0 +1,317 @@
+{
+  "name": "universal-ai-prompt-engineer",
+  "publisher": "mzainulabideen",
+  "displayName": "Universal AI Prompt Engineer",
+  "description": "Turn rough prompts into professional, actionable instructions for AI coding agents — with nine specialised modes.",
+  "icon": "resources/icon.png",
+  "version": "0.2.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mzainulabideendev/Universal-AI-Prompt-Engineer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mzainulabideendev/Universal-AI-Prompt-Engineer/issues"
+  },
+  "homepage": "https://github.com/mzainulabideendev/Universal-AI-Prompt-Engineer#readme",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "prompt",
+    "prompt engineering",
+    "ai",
+    "copilot",
+    "coding agent",
+    "llm",
+    "openai",
+    "productivity"
+  ],
+  "galleryBanner": {
+    "color": "#1e1b4b",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onCommand:universalAIPromptEngineer.enhanceSelection",
+    "onCommand:universalAIPromptEngineer.enhanceClipboard",
+    "onCommand:universalAIPromptEngineer.openPromptPanel",
+    "onCommand:universalAIPromptEngineer.quickEnhance",
+    "onCommand:universalAIPromptEngineer.professionalEnhance",
+    "onCommand:universalAIPromptEngineer.developerEnhance",
+    "onCommand:universalAIPromptEngineer.architectEnhance",
+    "onCommand:universalAIPromptEngineer.debuggingEnhance",
+    "onCommand:universalAIPromptEngineer.codeReviewEnhance",
+    "onCommand:universalAIPromptEngineer.uiuxEnhance",
+    "onCommand:universalAIPromptEngineer.gameEnhance",
+    "onCommand:universalAIPromptEngineer.autonomousEnhance",
+    "onView:promptEngineerSidebar",
+    "onView:promptEngineerSetup"
+  ],
+  "main": "./dist/extension.js",
+  "scripts": {
+    "compile": "tsc -p ./tsconfig.json",
+    "watch": "tsc -watch -p ./tsconfig.json",
+    "test": "npm run compile && node --test",
+    "package": "npm run compile && vsce package",
+    "vscode:prepublish": "npm run compile"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "universalAIPromptEngineer.enhanceSelection",
+        "title": "Enhance Selected Prompt",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.enhanceClipboard",
+        "title": "Enhance Prompt from Clipboard",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.openPromptPanel",
+        "title": "Open Prompt Engineer Panel",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.setApiKey",
+        "title": "Set API Key",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.clearApiKey",
+        "title": "Clear API Key",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.quickEnhance",
+        "title": "Quick Enhance",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.professionalEnhance",
+        "title": "Professional Enhance",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.developerEnhance",
+        "title": "Developer Mode",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.architectEnhance",
+        "title": "Expert Architect Mode",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.debuggingEnhance",
+        "title": "Debugging Mode",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.codeReviewEnhance",
+        "title": "Code Review Mode",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.uiuxEnhance",
+        "title": "UI/UX Mode",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.gameEnhance",
+        "title": "Game Development Mode",
+        "category": "AI Prompt Engineer"
+      },
+      {
+        "command": "universalAIPromptEngineer.autonomousEnhance",
+        "title": "Autonomous Agent Mode",
+        "category": "AI Prompt Engineer"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "promptEngineer",
+          "title": "Prompt Engineer",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "promptEngineer": [
+        {
+          "id": "promptEngineerSidebar",
+          "name": "Modes",
+          "icon": "resources/icon.svg"
+        },
+        {
+          "id": "promptEngineerSetup",
+          "name": "Setup",
+          "icon": "$(gear)"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "promptEngineerSidebar",
+        "contents": "Select a mode to open the Prompt Engineer panel with that mode preselected.\n[Open Panel](command:universalAIPromptEngineer.openPromptPanel)"
+      },
+      {
+        "view": "promptEngineerSetup",
+        "contents": "Add a provider API key to enable AI enhancement.\n[Set API Key](command:universalAIPromptEngineer.setApiKey)\n[Open Panel](command:universalAIPromptEngineer.openPromptPanel)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "universalAIPromptEngineer.enhanceSelection",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "universalAIPromptEngineer.quickEnhance",
+          "when": "true"
+        },
+        {
+          "command": "universalAIPromptEngineer.professionalEnhance",
+          "when": "true"
+        },
+        {
+          "command": "universalAIPromptEngineer.developerEnhance",
+          "when": "true"
+        },
+        {
+          "command": "universalAIPromptEngineer.architectEnhance",
+          "when": "true"
+        },
+        {
+          "command": "universalAIPromptEngineer.debuggingEnhance",
+          "when": "true"
+        },
+        {
+          "command": "universalAIPromptEngineer.codeReviewEnhance",
+          "when": "true"
+        },
+        {
+          "command": "universalAIPromptEngineer.uiuxEnhance",
+          "when": "true"
+        },
+        {
+          "command": "universalAIPromptEngineer.gameEnhance",
+          "when": "true"
+        },
+        {
+          "command": "universalAIPromptEngineer.autonomousEnhance",
+          "when": "true"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "universalAIPromptEngineer.enhanceSelection",
+          "when": "editorHasSelection",
+          "group": "navigation@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "universalAIPromptEngineer.openPromptPanel",
+          "when": "view == promptEngineerSidebar",
+          "group": "navigation@1"
+        },
+        {
+          "command": "universalAIPromptEngineer.setApiKey",
+          "when": "view == promptEngineerSetup",
+          "group": "navigation@1"
+        },
+        {
+          "command": "universalAIPromptEngineer.clearApiKey",
+          "when": "view == promptEngineerSetup",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "universalAIPromptEngineer.enhanceSelection",
+        "key": "ctrl+alt+p",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "universalAIPromptEngineer.openPromptPanel",
+        "key": "ctrl+alt+o",
+        "when": "true"
+      }
+    ],
+    "configuration": {
+      "title": "Universal AI Prompt Engineer",
+      "properties": {
+        "universalAIPromptEngineer.defaultMode": {
+          "type": "string",
+          "enum": [
+            "quick",
+            "professional",
+            "developer",
+            "architect",
+            "debugging",
+            "code-review",
+            "uiux",
+            "game",
+            "autonomous"
+          ],
+          "enumDescriptions": [
+            "Fast cleanup with no extra structure.",
+            "Polished, structured prompt with scope and success criteria.",
+            "Implementation-focused: conventions, error handling and tests.",
+            "System design: requirements, boundaries, trade-offs and staged delivery.",
+            "Reproduction, evidence, root cause and a verified minimal fix.",
+            "Prioritised, actionable review findings.",
+            "User goals, layout, responsiveness and accessibility.",
+            "Mechanics, controls, feedback, performance and playtesting.",
+            "Agent-ready instruction to inspect, plan, implement, verify and report."
+          ],
+          "default": "professional",
+          "description": "Default enhancement mode used when the user triggers the prompt engineer without choosing a mode."
+        },
+        "universalAIPromptEngineer.outputMode": {
+          "type": "string",
+          "enum": [
+            "panel",
+            "copy",
+            "replace"
+          ],
+          "enumDescriptions": [
+            "Show the enhanced prompt in the Prompt Engineer panel.",
+            "Copy the enhanced prompt to the clipboard.",
+            "Replace the current editor selection with the enhanced prompt."
+          ],
+          "default": "panel",
+          "description": "Choose how enhanced prompts are presented to the user."
+        },
+        "universalAIPromptEngineer.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the AI Prompt Engineer status bar action."
+        },
+        "universalAIPromptEngineer.apiEndpoint": {
+          "type": "string",
+          "default": "https://api.openai.com/v1",
+          "description": "HTTPS base URL for an OpenAI-compatible chat completions API. The API key is stored separately in VS Code SecretStorage."
+        },
+        "universalAIPromptEngineer.model": {
+          "type": "string",
+          "default": "gpt-4o-mini",
+          "description": "Model name accepted by the configured API provider."
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^4.1.1",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" width="1200" height="660">
+  <defs>
+    <linearGradient id="page" x1="0" y1="0" x2="0" y2="660" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0d1117" />
+      <stop offset="1" stop-color="#111827" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#818cf8" />
+      <stop offset="1" stop-color="#60a5fa" />
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0l10 5-10 5z" fill="#818cf8" />
+    </marker>
+    <marker id="arrowDim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0l10 5-10 5z" fill="#64748b" />
+    </marker>
+    <style>
+      .title { font-family: Segoe UI, Inter, Arial, sans-serif; font-size: 26px; font-weight: 700; fill: #f1f5f9; }
+      .sub { font-family: Segoe UI, Inter, Arial, sans-serif; font-size: 13px; fill: #94a3b8; }
+      .group { font-family: Segoe UI, Inter, Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; fill: #7c8aa3; }
+      .boxTitle { font-family: Segoe UI, Inter, Arial, sans-serif; font-size: 14px; font-weight: 600; fill: #e2e8f0; }
+      .boxSub { font-family: Segoe UI, Inter, Arial, sans-serif; font-size: 11.5px; fill: #93a3b8; }
+      .box { fill: #161b27; stroke: #2b3446; stroke-width: 1.2; }
+      .boxAccent { fill: #1a1f33; stroke: #4f46e5; stroke-width: 1.4; }
+      .pill { font-family: Segoe UI, Inter, Arial, sans-serif; font-size: 10.5px; font-weight: 600; fill: #c7d2fe; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="660" fill="url(#page)" />
+  <text x="40" y="54" class="title">Extension architecture</text>
+  <text x="40" y="78" class="sub">Everything runs locally inside VS Code except the single HTTPS call to the provider you configure.</text>
+
+  <!-- groups -->
+  <g>
+    <rect x="34" y="104" width="286" height="512" rx="14" fill="#0f1521" fill-opacity="0.7" stroke="#1f2937" />
+    <text x="56" y="132" class="group">VS CODE WORKBENCH</text>
+
+    <rect x="54" y="148" width="246" height="76" rx="10" class="box" />
+    <text x="72" y="176" class="boxTitle">Activity Bar → Prompt Engineer</text>
+    <text x="72" y="197" class="boxSub">Modes view · Setup view</text>
+    <text x="72" y="213" class="boxSub">tree items open the panel with a mode</text>
+
+    <rect x="54" y="242" width="246" height="82" rx="10" class="box" />
+    <text x="72" y="270" class="boxTitle">Commands &amp; keybindings</text>
+    <text x="72" y="291" class="boxSub">14 commands · palette · context menu</text>
+    <text x="72" y="307" class="boxSub">Ctrl+Alt+O · Ctrl+Alt+P</text>
+
+    <rect x="54" y="342" width="246" height="76" rx="10" class="box" />
+    <text x="72" y="370" class="boxTitle">Editor selection / clipboard</text>
+    <text x="72" y="391" class="boxSub">source text for enhancement</text>
+    <text x="72" y="407" class="boxSub">optional replace output target</text>
+
+    <rect x="54" y="436" width="246" height="70" rx="10" class="box" />
+    <text x="72" y="464" class="boxTitle">Status bar</text>
+    <text x="72" y="485" class="boxSub">$(sparkle) Prompt Engineer</text>
+
+    <rect x="54" y="524" width="246" height="72" rx="10" class="box" />
+    <text x="72" y="552" class="boxTitle">Settings UI</text>
+    <text x="72" y="573" class="boxSub">defaultMode · outputMode · endpoint</text>
+  </g>
+
+  <g>
+    <rect x="366" y="104" width="486" height="512" rx="14" fill="#0f1521" fill-opacity="0.7" stroke="#1f2937" />
+    <text x="388" y="132" class="group">EXTENSION HOST · NODE.JS</text>
+
+    <rect x="386" y="148" width="446" height="66" rx="10" class="boxAccent" />
+    <text x="404" y="175" class="boxTitle">activate(context)</text>
+    <text x="404" y="196" class="boxSub">registers commands · tree views · status bar · config listener</text>
+
+    <rect x="386" y="240" width="212" height="118" rx="10" class="boxAccent" />
+    <text x="404" y="268" class="boxTitle">PromptEngineerPanel</text>
+    <text x="404" y="289" class="boxSub">webview · CSP + nonce</text>
+    <text x="404" y="308" class="boxSub">postMessage protocol:</text>
+    <text x="404" y="325" class="boxSub">ready · saveSettings · enhance</text>
+    <text x="404" y="342" class="boxSub">result · error · copy</text>
+
+    <rect x="620" y="240" width="212" height="118" rx="10" class="boxAccent" />
+    <text x="638" y="268" class="boxTitle">aiProvider.ts</text>
+    <text x="638" y="289" class="boxSub">getCompletionUrl()</text>
+    <text x="638" y="308" class="boxSub">requestPromptEnhancement()</text>
+    <text x="638" y="325" class="boxSub">MODE_INSTRUCTIONS</text>
+    <text x="638" y="342" class="boxSub">90 s timeout · 20k char cap</text>
+
+    <rect x="386" y="388" width="212" height="86" rx="10" class="box" />
+    <text x="404" y="416" class="boxTitle">SecretStorage</text>
+    <text x="404" y="437" class="boxSub">universalAIPromptEngineer.apiKey</text>
+    <text x="404" y="456" class="boxSub">never written to settings.json</text>
+
+    <rect x="620" y="388" width="212" height="86" rx="10" class="box" />
+    <text x="638" y="416" class="boxTitle">Workspace configuration</text>
+    <text x="638" y="437" class="boxSub">apiEndpoint · model</text>
+    <text x="638" y="456" class="boxSub">outputMode · defaultMode</text>
+
+    <rect x="386" y="504" width="446" height="92" rx="10" class="box" />
+    <text x="404" y="532" class="boxTitle">Output routing</text>
+    <text x="404" y="553" class="boxSub">panel → showResult() · copy → clipboard · replace → editor.edit()</text>
+    <text x="404" y="574" class="boxSub">single source of truth for every entry point</text>
+  </g>
+
+  <g>
+    <rect x="880" y="104" width="286" height="512" rx="14" fill="#0f1521" fill-opacity="0.7" stroke="#1f2937" />
+    <text x="902" y="132" class="group">YOUR AI PROVIDER</text>
+
+    <rect x="900" y="240" width="246" height="118" rx="10" class="boxAccent" />
+    <text x="918" y="268" class="boxTitle">POST /chat/completions</text>
+    <text x="918" y="289" class="boxSub">Authorization: Bearer &lt;key&gt;</text>
+    <text x="918" y="308" class="boxSub">messages[0] = system prompt</text>
+    <text x="918" y="325" class="boxSub">messages[1] = your rough prompt</text>
+    <text x="918" y="342" class="boxSub">HTTPS only, no credentials in URL</text>
+
+    <rect x="900" y="388" width="246" height="86" rx="10" class="box" />
+    <text x="918" y="416" class="boxTitle">OpenAI-compatible model</text>
+    <text x="918" y="437" class="boxSub">gpt-4o-mini · OpenRouter · Groq</text>
+    <text x="918" y="456" class="boxSub">Together · local gateway</text>
+
+    <rect x="900" y="504" width="246" height="92" rx="10" class="box" />
+    <text x="918" y="532" class="boxTitle">Enhancement result</text>
+    <text x="918" y="553" class="boxSub">choices[0].message.content</text>
+    <text x="918" y="574" class="boxSub">returned to the extension</text>
+  </g>
+
+  <!-- flows -->
+  <g fill="none" stroke="#818cf8" stroke-width="1.7" stroke-linecap="round">
+    <path d="M300 186 C338 186 352 262 386 286" marker-end="url(#arrow)" />
+    <path d="M300 283 C338 283 352 292 386 300" marker-end="url(#arrow)" />
+    <path d="M300 380 C340 380 356 330 386 310" marker-end="url(#arrow)" />
+    <path d="M598 299 H620" marker-end="url(#arrow)" />
+    <path d="M598 320 C620 320 640 360 660 388" marker-end="url(#arrow)" opacity="0.0" />
+    <path d="M726 358 C726 380 726 400 726 414" marker-end="url(#arrow)" opacity="0.0" />
+    <path d="M832 299 C866 299 884 299 900 299" marker-end="url(#arrow)" />
+  </g>
+
+  <g fill="none" stroke="#64748b" stroke-width="1.4" stroke-dasharray="5 5" stroke-linecap="round">
+    <path d="M492 388 V366 H598 V320" marker-end="url(#arrowDim)" />
+    <path d="M726 474 V358" marker-end="url(#arrowDim)" />
+    <path d="M726 241 V215" marker-end="url(#arrowDim)" opacity="0.6" />
+    <path d="M300 560 H352 V540 H386" marker-end="url(#arrowDim)" />
+    <path d="M832 550 C866 550 888 540 900 540" marker-end="url(#arrowDim)" />
+  </g>
+
+  <text x="846" y="292" class="pill" fill="#c7d2fe">fetch()</text>
+</svg>
